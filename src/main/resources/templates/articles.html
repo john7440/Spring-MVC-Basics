@@ -10,6 +10,13 @@
             <div class="card border-primary">
                 <div class="card-header bg-primary text-white text-center">Liste des articles</div>
                 <div class="card-body">
+                    <form th:action="@{/index}" method="get">
+                        <label>Mot clé</label>
+                        <input type="text" name="keyword">
+                        <button type="submit" class="btn btn-primary"> Rechercher</button>
+                    </form>
+                </div>
+                <div class="card-body">
                     <table>
                         <tr>
                             <th>ID</th> <th>Marque</th> <th>Modèle</th> <th>Description</th> <th>Prix</th>
@@ -22,6 +29,11 @@
                             <td th:text="${a.price}"></td>
                         </tr>
                     </table>
+                    <ul class ="nav nav-pills">
+                        <li th:class="${currenPage==status.index}?'active':''" th:each="page,status:${pages}">
+                            <a th:href="@{/index(page=${status.index}, keyword=${keyword})}" th:text="${status.index}"></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
