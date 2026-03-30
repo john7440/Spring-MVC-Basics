@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Mes articles</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}">
 </head>
 <body>
-        Tout va bien ici !
+        <div class = "container mt-4">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white text-center">Liste des articles</div>
+                <div class="card-body">
+                    <table>
+                        <tr>
+                            <th>ID</th> <th>Marque</th> <th>Modèle</th> <th>Description</th> <th>Prix</th>
+                        </tr>
+                        <tr th:each="a:${listArticle}">
+                            <td th:text="${a.id}"></td>
+                            <td th:text="${a.brand}"></td>
+                            <td th:text="${a.model}"></td>
+                            <td th:text="${a.description}"></td>
+                            <td th:text="${a.price}"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
 </body>
 </html>
