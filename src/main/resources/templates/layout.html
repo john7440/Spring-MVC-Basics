@@ -12,17 +12,20 @@
     <div class="container">
         <div class="d-flex align-items-center gap-3">
             <a class="navbar-brand fw-bold fs-3" href="#">GameZone</a>
-<!--            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#adminModal">-->
+<!--            <a class="btn btn-outline-primary btn-sm" th:href="@{/admin}">-->
 <!--                <i class="bi bi-gear"></i> Admin-->
-<!--            </button>-->
+<!--            </a>-->
         </div>
 
         <div class="d-flex gap-2">
             <a class="btn btn-dark position-relative" th:href="@{/index}">
                 Accueil
             </a>
-            <a class="btn btn-dark position-relative" th:href="@{/formArticle}">
-                <i class="bi bi-cart4"></i> Ajouter un article
+            <a class="btn btn-dark position-relative" th:href="@{/cart}">
+                <i class="bi bi-cart4"></i> Panier
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">
+                        0
+                </span>
             </a>
         </div>
     </div>
