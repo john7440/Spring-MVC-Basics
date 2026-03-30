@@ -1,6 +1,7 @@
 package com.example.web;
 
 import com.example.dao.ArticleRepository;
+import com.example.dao.CategoryRepository;
 import com.example.entities.Article;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -20,6 +20,9 @@ import java.util.List;
 public class ArticleController {
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @GetMapping("/index")
     public String index(Model model, @RequestParam(name = "page", defaultValue = "0") int page,
@@ -41,11 +44,12 @@ public class ArticleController {
     @GetMapping("/formArticle")
     public String formArticle(Model model) {
         model.addAttribute("article", new Article());
+        model.addAttribute("listCategory", categoryRepository.findAll());
         return "formArticle";
     }
 
     @PostMapping("/save")
-    public String save(Model model, @Valid Article article, BindingResult bindingResult) {
+    public String save(@Valid Article article, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) { return "formArticle";}
         articleRepository.save(article);
         return "redirect:/index";

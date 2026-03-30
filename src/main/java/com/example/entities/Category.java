@@ -21,4 +21,8 @@ public class Category implements Serializable {
 
     @OneToMany
     private Collection<Article> articles;
+
+    public Category(String name) {
+        this.name = name;
+    }
 }
