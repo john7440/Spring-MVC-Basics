@@ -8,6 +8,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -31,6 +33,18 @@ public class ArticleController {
     @GetMapping("/delete")
     public String delete(Long id, int page,String keyword) {
         articleRepository.deleteById(id);
+        return "redirect:/index";
+    }
+
+    @GetMapping("/formArticle")
+    public String formArticle(Model model) {
+        model.addAttribute("article", new Article());
+        return "formArticle";
+    }
+
+    @PostMapping("/save")
+    public String save(@ModelAttribute Article article) {
+        articleRepository.save(article);
         return "redirect:/index";
     }
 }

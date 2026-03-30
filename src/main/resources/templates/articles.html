@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Mes articles</title>
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}">
+<html xmlns:th = "http://thymeleaf.org"
+      xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate = "layout">
 </head>
 <body>
+        <div layout:fragment="content">
         <div class = "container mt-4">
             <div class="card border-primary">
                 <div class="card-header bg-primary text-white text-center">Liste des articles</div>
@@ -39,6 +38,7 @@
                     </ul>
                 </div>
             </div>
+        </div>
         </div>
 </body>
 </html>

@@ -1,0 +1,34 @@
+<!DOCTYPE hmtl>
+<html lang="en"
+      xmlns:th = "http://thymeleaf.org"
+      xmlns:layout = "http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Layout</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <a class="navbar-brand fw-bold fs-3" href="#">GameZone</a>
+<!--            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#adminModal">-->
+<!--                <i class="bi bi-gear"></i> Admin-->
+<!--            </button>-->
+        </div>
+
+        <div class="d-flex gap-2">
+            <a class="btn btn-dark position-relative" th:href="@{/index}">
+                Accueil
+            </a>
+            <a class="btn btn-dark position-relative" th:href="@{/formArticle}">
+                <i class="bi bi-cart4"></i> Ajouter un article
+            </a>
+        </div>
+    </div>
+</nav>
+
+<section layout:fragment="content"></section>
+
+</body>
+</html>
