@@ -1,9 +1,6 @@
 package com.example.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -34,11 +31,22 @@ public class Article implements Serializable {
     @DecimalMin("50")
     private double price;
 
+    @ManyToOne
+    private Category category;
+
     public Article(String brand, String model, String description, double price) {
         this.brand = brand;
         this.model = model;
         this.description = description;
         this.price = price;
+    }
+
+    public Article(String brand, String model, String description, double price, Category category) {
+        this.brand = brand;
+        this.model = model;
+        this.description = description;
+        this.price = price;
+        this.category = category;
     }
 
 }
