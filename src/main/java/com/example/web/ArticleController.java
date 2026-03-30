@@ -2,11 +2,13 @@ package com.example.web;
 
 import com.example.dao.ArticleRepository;
 import com.example.entities.Article;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,7 +45,8 @@ public class ArticleController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute Article article) {
+    public String save(Model model, @Valid Article article, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) { return "formArticle";}
         articleRepository.save(article);
         return "redirect:/index";
     }
