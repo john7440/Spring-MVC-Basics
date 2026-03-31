@@ -46,12 +46,14 @@ public class ArticleController {
         return "articles";
     }
 
+    //---------------------méthodepour supprimer un article ----------------------
     @GetMapping("/delete")
     public String delete(Long id, int page,String keyword) {
         articleRepository.deleteById(id);
         return "redirect:/index";
     }
 
+    //------------------formulaire d'ajout d'article-------------------------------
     @GetMapping("/formArticle")
     public String formArticle(Model model) {
         model.addAttribute("article", new Article());
@@ -59,18 +61,45 @@ public class ArticleController {
         return "formArticle";
     }
 
+    //------------------méthode pour mettre à jour un article---------------------------
+    @GetMapping("/editArticle")
+    public String editArticle(Model model, Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Article introuvable"));
+        model.addAttribute("article", article);
+        model.addAttribute("listCategories", categoryRepository.findAll());
+        return "editArticle";
+    }
+
+    //-----------------------------méthode pour sauvegarder un article valide------------------------
     @PostMapping("/save")
     public String save(@Valid Article article, BindingResult bindingResult,
                        @RequestParam(name = "categoryId", required = false) Long categoryId,
+                       @RequestParam(name = "id", required = false) Long id,
                        Model model) {
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("listCategories", categoryRepository.findAll());
             return "formArticle";
         }
-        if (categoryId != null) {
-            categoryRepository.findById(categoryId).ifPresent(article::setCategory);
+
+        Article toSave;
+
+        if (id != null) {
+            toSave = articleRepository.findById(id).orElse(new Article());
+        } else {
+            toSave = new Article();
         }
-        articleRepository.save(article);
+
+        toSave.setBrand(article.getBrand());
+        toSave.setModel(article.getModel());
+        toSave.setDescription(article.getDescription());
+        toSave.setPrice(article.getPrice());
+
+        if (categoryId != null) {
+            categoryRepository.findById(categoryId).ifPresent(toSave::setCategory);
+        }
+
+        articleRepository.save(toSave);
         return "redirect:/index";
     }
 }
