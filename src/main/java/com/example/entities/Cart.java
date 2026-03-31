@@ -20,4 +20,10 @@ public class Cart implements Serializable {
 
     @OneToMany(mappedBy = "cart",cascade = CascadeType.ALL)
     private List<CartItem> items = new ArrayList<>();
+
+    public double getTotal() {
+        return items.stream()
+                .mapToDouble(i -> i.getArticle().getPrice() * i.getQuantity())
+                .sum();
+    }
 }
