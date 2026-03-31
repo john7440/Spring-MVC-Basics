@@ -18,6 +18,12 @@ public class AppUser implements Serializable {
     private String password;
     private String role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Cart cart;
+
+    public AppUser(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 }

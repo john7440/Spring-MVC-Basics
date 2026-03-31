@@ -72,6 +72,10 @@
                             <span class="badge bg-secondary" th:text="${a.category != null ? a.category.name : 'N/A'}"></span>
                         </td>
                         <td class="text-center">
+                            <a class="btn btn-sm btn-success me-1"
+                               th:href="@{/cart/add(articleId=${a.id})}">
+                                Ajouter
+                            </a>
                             <a class="btn btn-sm btn-warning me-1"
                                th:href="@{/editArticle(id=${a.id})}">Modifier</a>
                             <a class="btn btn-sm btn-danger"

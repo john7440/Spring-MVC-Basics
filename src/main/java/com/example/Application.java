@@ -1,9 +1,9 @@
 package com.example;
 
+import com.example.dao.AppUserRepository;
 import com.example.dao.ArticleRepository;
 import com.example.dao.CategoryRepository;
-import com.example.entities.Article;
-import com.example.entities.Category;
+import com.example.entities.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +15,8 @@ public class Application implements CommandLineRunner {
     private ArticleRepository articleRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private AppUserRepository appUserRepository;
 
 	public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -22,5 +24,6 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        //appUserRepository.save(new AppUser("user1", "password123456", "USER"));
     }
 }
