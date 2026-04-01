@@ -12,7 +12,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm sticky-top">
     <div class="container">
         <div class="d-flex align-items-center gap-3">
-            <a class="navbar-brand fw-bold fs-3" href="/index">GameZone</a>
+            <a class="navbar-brand fw-bold fs-3" href="/index">SmartZone</a>
         </div>
 
         <div class="d-flex gap-2">
@@ -22,7 +22,9 @@
             <span th:if="${session.currentUser.role == 'ADMIN'}"
                   class="badge bg-danger ms-1">Admin</span>
         </span>
-                <a th:href="@{/logout}" class="btn btn-outline-dark btn-sm">Déconnexion</a>
+                <a th:href="@{/orders}"
+                   class="btn btn-outline-dark">Mes commandes</a>
+                <a th:href="@{/logout}" class="btn btn-outline-dark">Déconnexion</a>
             </div>
 
             <a th:if="${session.currentUser == null}"
@@ -45,7 +47,7 @@
         <div class="row">
 
             <div class="col-lg-3 col-md-6 mb-4">
-                <h5 class="fw-bold text-uppercase text-primary mb-3">GameZone</h5>
+                <h5 class="fw-bold text-uppercase text-primary mb-3">SmartZone</h5>
                 <p class="text-secondary small">
                     La référence du commerce en ligne !
                 </p>
@@ -92,7 +94,7 @@
         <div class="row align-items-center">
             <div class="col-md-7 col-lg-8 text-center text-md-start">
                 <p class="small text-secondary mb-0">
-                    &copy; 2026 <strong>GameZone</strong> Aucun droits réservés. Designed by <a href="https://github.com/john7440" class="text-secondary text-decoration-none">Jonathan Maier</a>
+                    &copy; 2026 <strong>SmartZone</strong> Aucun droits réservés. Designed by <a href="https://github.com/john7440" class="text-secondary text-decoration-none">Jonathan Maier</a>
                 </p>
             </div>
             <div class="col-md-5 col-lg-4">
