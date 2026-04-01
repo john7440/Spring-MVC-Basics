@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org"
+<html lang= "en"
+      xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout">
 <head>
@@ -12,59 +13,33 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="text-primary fw-bold">Mon panier</h4>
-            <a th:href="@{/index}" class="btn btn-outline-primary">
-                Continuer mes achats
-            </a>
+            <a th:href="@{/index}" class="btn btn-outline-primary">Continuer mes achats</a>
         </div>
 
-        <!-- Panier vide -->
-        <div th:if="${#lists.isEmpty(cart.items)}" class="alert alert-info text-center">
+        <div id="emptyCart" class="alert alert-info text-center d-none">
             Votre panier est vide
         </div>
 
-        <!-- Tableau des articles du panier -->
-        <div th:if="${!#lists.isEmpty(cart.items)}">
+        <!--le tableau-->
+        <div id="cartContainer" class="d-none">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-0">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-primary">
                         <tr>
                             <th>Article</th>
-                            <th>Marque</th>
                             <th>Prix unitaire</th>
                             <th>Quantité</th>
                             <th>Sous-total</th>
                             <th class="text-center">Action</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:each="item : ${cart.items}">
-                            <td th:text="${item.article.model}"></td>
-                            <td th:text="${item.article.brand}"></td>
-                            <td>
-                                    <span class="badge bg-success"
-                                          th:text="${item.article.price} + ' €'"></span>
-                            </td>
-                            <td th:text="${item.quantity}"></td>
-                            <td>
-                                    <span class="badge bg-primary"
-                                          th:text="${item.article.price * item.quantity} + ' €'"></span>
-                            </td>
-                            <td class="text-center">
-                                <a class="btn btn-sm btn-danger"
-                                   th:href="@{/cart/remove(itemId=${item.id})}"
-                                   onclick="return confirm('Retirer cet article ?')">
-                                    Retirer
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
+                        <tbody id="cartBody"></tbody>
                         <tfoot class="table-light">
                         <tr>
-                            <td colspan="4" class="text-end fw-bold">Total :</td>
+                            <td colspan="3" class="text-end fw-bold">Total :</td>
                             <td>
-                                    <span class="badge bg-danger fs-6"
-                                          th:text="${cart.total} + ' €'"></span>
+                                <span id="cartTotal" class="badge bg-danger fs-6"></span>
                             </td>
                             <td></td>
                         </tr>
@@ -73,20 +48,106 @@
                 </div>
             </div>
 
-            <!-- Actions -->
             <div class="d-flex justify-content-between mt-3">
-                <a th:href="@{/cart/clear}"
-                   class="btn btn-outline-danger"
-                   onclick="return confirm('Vider le panier ?')">
+                <button class="btn btn-outline-danger" onclick="clearCart()">
                     Vider le panier
-                </a>
-                <a th:href="@{/cart/order}" class="btn btn-success">
+                </button>
+                <button class="btn btn-success" onclick="placeOrder()">
                     Passer la commande
-                </a>
+                </button>
             </div>
         </div>
 
     </div>
+</div>
+
+<th:block layout:fragment="scripts">
+    <script>
+        function renderCart() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const body = document.getElementById('cartBody');
+            const emptyDiv = document.getElementById('emptyCart');
+            const cartContainer = document.getElementById('cartContainer');
+
+            if (cart.length === 0) {
+                emptyDiv.classList.remove('d-none');
+                cartContainer.classList.add('d-none');
+                return;
+            }
+
+            emptyDiv.classList.add('d-none');
+            cartContainer.classList.remove('d-none');
+
+            body.innerHTML = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                body.innerHTML += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td><span class="badge bg-success">${item.price} €</span></td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn btn-sm btn-outline-secondary" onclick="changeQty(${index}, -1)">−</button>
+                                <span>${item.quantity}</span>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="changeQty(${index}, 1)">+</button>
+                            </div>
+                        </td>
+                        <td><span class="badge bg-primary">${subtotal.toFixed(2)} €</span></td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-danger" onclick="removeItem(${index})">Retirer</button>
+                        </td>
+                    </tr>`;
+            });
+
+            document.getElementById('cartTotal').textContent = total.toFixed(2) + ' €';
+        }
+
+        function changeQty(index, delta) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart[index].quantity += delta;
+            if (cart[index].quantity <= 0) cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function removeItem(index) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+
+        function clearCart() {
+            if (confirm('Vider le panier ?')) {
+                localStorage.removeItem('cart');
+                renderCart();
+            }
+        }
+
+        function placeOrder() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (cart.length === 0) return alert('Votre panier est vide!');
+
+            fetch('/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(cart)
+            }).then(res => {
+                if (res.ok) {
+                    localStorage.removeItem('cart');
+                    globalThis.location.href = '/orderConfirmation';
+                } else {
+                    alert('Erreur lors de la commande.');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderCart);
+    </script>
+</th:block>
 </div>
 </body>
 </html>
