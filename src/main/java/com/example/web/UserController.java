@@ -78,4 +78,11 @@ public class UserController {
         return "redirect:/index";
     }
 
+    //-------------------méthode de déconnexion ------------------------------
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
+
 }
