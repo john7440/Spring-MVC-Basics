@@ -21,7 +21,7 @@ public class UserController {
     //-------------affichage formulaire de connexion -------------------
 
     /**
-     * The login Form
+     * Mapping to the login Form
      * @return
      */
     @GetMapping("/login")
@@ -48,4 +48,34 @@ public class UserController {
         model.addAttribute("error", "Identifiants incorrect");
         return "login";
     }
+
+    //----------------------------inscription-----------------------------------------
+
+    /**
+     *  Mapping to the register form
+     * @return
+     */
+    @GetMapping("/register")
+    public String registerForm() {
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestParam String username,
+                           @RequestParam String password,
+                           HttpSession session) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            return "redirect:/register?error=exists";
+        }
+
+        AppUser user = new AppUser();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setRole("USER");
+        userRepository.save(user);
+
+        session.setAttribute("currentUser", user);
+        return "redirect:/index";
+    }
+
 }
