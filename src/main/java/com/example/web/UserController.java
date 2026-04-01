@@ -4,6 +4,7 @@ import com.example.dao.AppUserRepository;
 import com.example.entities.AppUser;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,9 @@ public class UserController {
 
     @Autowired
     private AppUserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     private static final String REDIRECTION ="redirect:/index";
 
@@ -52,7 +56,7 @@ public class UserController {
                         Model model) {
         Optional<AppUser> user = userRepository.findByUsername(username);
 
-        if (user.isPresent() && user.get().getPassword().equals(password)) {
+        if (user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
             session.setAttribute("currentUser", user.get());
             if (user.get().getRole().equals("ADMIN")) {
                 return REDIRECTION;
@@ -93,7 +97,7 @@ public class UserController {
 
         AppUser user = new AppUser();
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setRole("USER");
         userRepository.save(user);
 

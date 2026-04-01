@@ -24,7 +24,7 @@
                     Commande <strong th:text="'#' + ${order.id}"></strong>
                     - <span th:text="${#temporals.format(order.date, 'dd/MM/yyyy HH:mm')}"></span>
                 </span>
-                <span class="badge bg-warning fs-6" th:text="'Total ' + ${order.total} + ' €'"></span>
+                <span class="badge bg-dark fs-6" th:text="'Total ' + ${order.total} + ' €'"></span>
             </div>
             <div class="card-body p-0">
                 <table class="table table-sm align-middle mb-0">
