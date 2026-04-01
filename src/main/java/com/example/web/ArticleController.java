@@ -2,7 +2,9 @@ package com.example.web;
 
 import com.example.dao.ArticleRepository;
 import com.example.dao.CategoryRepository;
+import com.example.entities.AppUser;
 import com.example.entities.Article;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,11 @@ public class ArticleController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    private boolean isAdmin(HttpSession session){
+        AppUser appUser = (AppUser)session.getAttribute("currentUser");
+        return appUser != null && appUser.getRole().equals("ADMIN");
+    }
 
     @GetMapping("/index")
     public String index(Model model, @RequestParam(name = "page", defaultValue = "0") int page,
@@ -46,16 +53,18 @@ public class ArticleController {
         return "articles";
     }
 
-    //---------------------méthodepour supprimer un article ----------------------
+    //---------------------méthode pour supprimer un article ----------------------
     @GetMapping("/delete")
-    public String delete(Long id, int page,String keyword) {
+    public String delete(Long id, int page,String keyword,HttpSession session) {
+        if (!isAdmin(session)) return "redirect:/index";
         articleRepository.deleteById(id);
         return "redirect:/index";
     }
 
     //------------------formulaire d'ajout d'article-------------------------------
     @GetMapping("/formArticle")
-    public String formArticle(Model model) {
+    public String formArticle(Model model, HttpSession session) {
+        if (!isAdmin(session)) return "redirect:/index";
         model.addAttribute("article", new Article());
         model.addAttribute("listCategories", categoryRepository.findAll());
         return "formArticle";
@@ -63,7 +72,8 @@ public class ArticleController {
 
     //------------------méthode pour mettre à jour un article---------------------------
     @GetMapping("/editArticle")
-    public String editArticle(Model model, Long id) {
+    public String editArticle(Model model, Long id, HttpSession session) {
+        if (!isAdmin(session)) return "redirect:/index";
         Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Article introuvable"));
         model.addAttribute("article", article);
         model.addAttribute("listCategories", categoryRepository.findAll());
@@ -75,8 +85,8 @@ public class ArticleController {
     public String save(@Valid Article article, BindingResult bindingResult,
                        @RequestParam(name = "categoryId", required = false) Long categoryId,
                        @RequestParam(name = "id", required = false) Long id,
-                       Model model) {
-
+                       HttpSession session,Model model) {
+        if (!isAdmin(session)) return "redirect:/index";
         if (bindingResult.hasErrors()) {
             model.addAttribute("listCategories", categoryRepository.findAll());
             return "formArticle";

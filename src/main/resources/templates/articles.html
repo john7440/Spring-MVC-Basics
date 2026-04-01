@@ -13,7 +13,8 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="mb-0 text-primary fw-bold">Liste des articles</h4>
-            <a th:href="@{/formArticle}" class="btn btn-success">
+            <a th:if="${session.currentUser != null && session.currentUser.role == 'ADMIN'}"
+               th:href="@{/formArticle}" class="btn btn-success">
                 + Nouvel article
             </a>
         </div>
@@ -43,7 +44,7 @@
             </a>
         </div>
 
-        <div class="card border-0 shadow-sm">
+        <div class="card border-1  border-dark shadow-xl">
             <div class="card-body p-0">
                 <table class="table table-hover table-striped align-middle mb-0">
                     <thead class="table-primary">
@@ -70,7 +71,7 @@
                             <span class="badge bg-success" th:text="${a.price} + ' €'"></span>
                         </td>
                         <td>
-                            <span class="badge bg-secondary" th:text="${a.category != null ? a.category.name : 'N/A'}"></span>
+                            <span class="badge bg-warning" th:text="${a.category != null ? a.category.name : 'N/A'}"></span>
                         </td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-success me-1"
@@ -78,14 +79,16 @@
                                th:data-name="${a.brand + ' ' + a.model}"
                                th:data-price="${a.price}"
                                onclick="addToCart(this.dataset.id, this.dataset.name, parseFloat(this.dataset.price))">
-                                Ajouter
+                                Ajouter au panier
                             </button>
 
-                            <a class="btn btn-sm btn-warning me-1"
-                               th:href="@{/editArticle(id=${a.id})}">Modifier</a>
-                            <button class="btn btn-sm btn-danger"
-                               th:href="@{/delete(id=${a.id}, page=${currentPage}, keyword=${keyword})}"
-                               onclick="return confirm('Supprimer cet article ?')">Supprimer</button>
+                            <th:block th:if="${session.currentUser != null && session.currentUser.role == 'ADMIN'}">
+                                <a class="btn btn-sm btn-warning me-1"
+                                   th:href="@{/editArticle(id=${a.id})}">Modifier</a>
+                                <a class="btn btn-sm btn-danger"
+                                   th:href="@{/delete(id=${a.id}, page=${currentPage}, keyword=${keyword})}"
+                                   onclick="return confirm('Supprimer cet article ?')">Supprimer</a>
+                            </th:block>
                         </td>
                     </tr>
                     </tbody>
