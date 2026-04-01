@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
+/**
+ * Controller responsible for handling user authentication operations like
+ * login, registration and logout
+ */
 @Controller
 public class UserController {
 
@@ -21,8 +25,8 @@ public class UserController {
     //-------------affichage formulaire de connexion -------------------
 
     /**
-     * Mapping to the login Form
-     * @return
+     * Displays the login form
+     * @return the name of the login template
      */
     @GetMapping("/login")
     public String loginForm() {
@@ -31,6 +35,14 @@ public class UserController {
 
     //-----------------méthode pour traiter la connexion--------------
 
+    /**
+     * Processes the login form submission
+     * @param username the username submitted via the login form
+     * @param password the plain-text password submitted via the login form
+     * @param session  the current HTTP session, used to store the authenticated user
+     * @param model the Spring MVC model, used to pass error messages to the view
+     * @return  redirect to /index on success/failure
+     */
     @PostMapping("/login")
     public String login(@RequestParam String username,
                         @RequestParam String password,
@@ -52,14 +64,23 @@ public class UserController {
     //----------------------------inscription-----------------------------------------
 
     /**
-     *  Mapping to the register form
-     * @return
+     * Displays the registration form
+     * @return the name of the register template
      */
     @GetMapping("/register")
     public String registerForm() {
         return "register";
     }
 
+    /**
+     * Processes the registration form submission
+     *
+     * @param username the desired username submitted via the registration form
+     * @param password the plain-text password submitted via the registration form
+     * @param session  the current HTTP session, used to store the newly registered user
+     * @return a redirect to /register?error=exists if the username is already taken,
+     *         or a redirect to /index on successful registration
+     */
     @PostMapping("/register")
     public String register(@RequestParam String username,
                            @RequestParam String password,
@@ -79,10 +100,17 @@ public class UserController {
     }
 
     //-------------------méthode de déconnexion ------------------------------
+
+    /**
+     * Logs out the current user by invalidating the HTTP session
+     *
+     * @param session the current HTTP session to invalidate
+     * @return a redirect to /index
+     */
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/index";
     }
 
 }
