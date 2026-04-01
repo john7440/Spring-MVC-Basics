@@ -25,6 +25,9 @@ public class ArticleController {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    private String REDIRECTION = "redirect:/index";
+    private String CATEGORIES = "listCategories";
+
     /**
      * Checks whether the currently authenticated user has the "ADMIN" role
      *
@@ -57,7 +60,7 @@ public class ArticleController {
             articles = articleRepository.findByCategoryId(categoryId,PageRequest.of(page,5));
             model.addAttribute("currentCategory",categoryId);
         } else {
-            articles = articleRepository.findByDescriptionContains(kw,PageRequest.of(page,5));
+            articles = articleRepository.findByModelContains(kw,PageRequest.of(page,5));
             model.addAttribute("currentCategory",null);
         }
 
@@ -65,7 +68,7 @@ public class ArticleController {
         model.addAttribute("pages", new int[articles.getTotalPages()]);
         model.addAttribute("currentPage", page);
         model.addAttribute("keyword", kw);
-        model.addAttribute("listCategories", categoryRepository.findAll());
+        model.addAttribute(CATEGORIES, categoryRepository.findAll());
         return "articles";
     }
 
@@ -82,9 +85,9 @@ public class ArticleController {
      */
     @GetMapping("/delete")
     public String delete(Long id, int page,String keyword,HttpSession session) {
-        if (!isAdmin(session)) return "redirect:/index";
+        if (!isAdmin(session)) return REDIRECTION;
         articleRepository.deleteById(id);
-        return "redirect:/index";
+        return REDIRECTION;
     }
 
     //------------------formulaire d'ajout d'article-------------------------------
@@ -99,9 +102,9 @@ public class ArticleController {
      */
     @GetMapping("/formArticle")
     public String formArticle(Model model, HttpSession session) {
-        if (!isAdmin(session)) return "redirect:/index";
+        if (!isAdmin(session)) return REDIRECTION;
         model.addAttribute("article", new Article());
-        model.addAttribute("listCategories", categoryRepository.findAll());
+        model.addAttribute(CATEGORIES, categoryRepository.findAll());
         return "formArticle";
     }
 
@@ -119,10 +122,10 @@ public class ArticleController {
      */
     @GetMapping("/editArticle")
     public String editArticle(Model model, Long id, HttpSession session) {
-        if (!isAdmin(session)) return "redirect:/index";
+        if (!isAdmin(session)) return REDIRECTION;
         Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Article introuvable"));
         model.addAttribute("article", article);
-        model.addAttribute("listCategories", categoryRepository.findAll());
+        model.addAttribute(CATEGORIES, categoryRepository.findAll());
         return "editArticle";
     }
 
@@ -148,9 +151,9 @@ public class ArticleController {
                        @RequestParam(name = "categoryId", required = false) Long categoryId,
                        @RequestParam(name = "id", required = false) Long id,
                        HttpSession session,Model model) {
-        if (!isAdmin(session)) return "redirect:/index";
+        if (!isAdmin(session)) return REDIRECTION;
         if (bindingResult.hasErrors()) {
-            model.addAttribute("listCategories", categoryRepository.findAll());
+            model.addAttribute(CATEGORIES, categoryRepository.findAll());
             return "formArticle";
         }
 
@@ -172,6 +175,6 @@ public class ArticleController {
         }
 
         articleRepository.save(toSave);
-        return "redirect:/index";
+        return REDIRECTION;
     }
 }

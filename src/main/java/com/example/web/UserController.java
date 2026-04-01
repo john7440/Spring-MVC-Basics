@@ -22,6 +22,8 @@ public class UserController {
     @Autowired
     private AppUserRepository userRepository;
 
+    private static final String REDIRECTION ="redirect:/index";
+
     //-------------affichage formulaire de connexion -------------------
 
     /**
@@ -53,9 +55,9 @@ public class UserController {
         if (user.isPresent() && user.get().getPassword().equals(password)) {
             session.setAttribute("currentUser", user.get());
             if (user.get().getRole().equals("ADMIN")) {
-                return "redirect:/index";
+                return REDIRECTION;
             }
-            return "redirect:/index";
+            return REDIRECTION;
         }
         model.addAttribute("error", "Identifiants incorrect");
         return "login";
@@ -96,7 +98,7 @@ public class UserController {
         userRepository.save(user);
 
         session.setAttribute("currentUser", user);
-        return "redirect:/index";
+        return REDIRECTION;
     }
 
     //-------------------méthode de déconnexion ------------------------------
@@ -110,7 +112,7 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/index";
+        return REDIRECTION;
     }
 
 }
