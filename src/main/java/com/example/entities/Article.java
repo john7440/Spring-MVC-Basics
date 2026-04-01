@@ -28,7 +28,8 @@ public class Article implements Serializable {
 
     private String description;
 
-    @DecimalMin("50")
+    @NotNull
+    @DecimalMin("1")
     private double price;
 
     @ManyToOne
