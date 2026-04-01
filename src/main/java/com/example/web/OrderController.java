@@ -29,6 +29,19 @@ public class OrderController {
     @Autowired
     private ArticleRepository articleRepository;
 
+    /**
+     * Places a new order for the currently authenticated user
+     *
+     * Returns 401 Unauthorized if no user is found
+     * Returns 500 Internal Server Error if an article ID referenced
+     * in the cart does not exist in the database
+     *
+     * @param items   a list of CartItemDTO objects representing the cart,
+     *                each containing an article ID and a quantity
+     * @param session the current HTTP session, used to retrieve the authenticated user
+     * @return OK on success, or 401 Unauthorized if the user
+     *         is not logged in
+     */
     @PostMapping("/order")
     public ResponseEntity<?> placeOrder(@RequestBody List<CartItemDTO> items,
                                         HttpSession session) {
