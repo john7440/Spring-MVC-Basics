@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <meta charset="utf-8">
+    <title>Mes commandes</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container mt-4">
+
+        <h2 class="text-Dark fw-bold mb-3 text-center">Mes commandes</h2>
+
+        <div th:if="${#lists.isEmpty(orders)}" class="alert alert-info text-center">
+            Vous n'avez pas encore passé de commande
+        </div>
+
+        <!--liste commandes -->
+        <div th:each="order : ${orders}" class="card border-0 shadow-sm mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>
+                    Commande <strong th:text="'#' + ${order.id}"></strong>
+                    - <span th:text="${#temporals.format(order.date, 'dd/MM/yyyy HH:mm')}"></span>
+                </span>
+                <span class="badge bg-warning fs-6" th:text="'Total ' + ${order.total} + ' €'"></span>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm align-middle mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Article</th>
+                        <th>Marque</th>
+                        <th>Prix unitaire</th>
+                        <th>Quantité</th>
+                        <th>Sous-total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${order.items}">
+                        <td th:text="${item.article.model}"></td>
+                        <td th:text="${item.article.brand}"></td>
+                        <td>
+                                <span class="badge bg-success"
+                                      th:text="${item.priceAtOrder} + ' €'"></span>
+                        </td>
+                        <td th:text="${item.quantity}"></td>
+                        <td>
+                                <span class="badge bg-primary"
+                                      th:text="${item.priceAtOrder * item.quantity} + ' €'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
