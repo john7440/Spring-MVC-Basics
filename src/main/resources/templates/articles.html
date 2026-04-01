@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org"
+<html lang="en"
+      xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout">
 <head>
@@ -72,15 +73,19 @@
                             <span class="badge bg-secondary" th:text="${a.category != null ? a.category.name : 'N/A'}"></span>
                         </td>
                         <td class="text-center">
-                            <a class="btn btn-sm btn-success me-1"
-                               th:href="@{/cart/add(articleId=${a.id})}">
+                            <button class="btn btn-sm btn-success me-1"
+                               th:data-id="${a.id}"
+                               th:data-name="${a.brand + ' ' + a.model}"
+                               th:data-price="${a.price}"
+                               onclick="addToCart(this.dataset.id, this.dataset.name, parseFloat(this.dataset.price))">
                                 Ajouter
-                            </a>
+                            </button>
+
                             <a class="btn btn-sm btn-warning me-1"
                                th:href="@{/editArticle(id=${a.id})}">Modifier</a>
-                            <a class="btn btn-sm btn-danger"
+                            <button class="btn btn-sm btn-danger"
                                th:href="@{/delete(id=${a.id}, page=${currentPage}, keyword=${keyword})}"
-                               onclick="return confirm('Supprimer cet article ?')">Supprimer</a>
+                               onclick="return confirm('Supprimer cet article ?')">Supprimer</button>
                         </td>
                     </tr>
                     </tbody>
@@ -102,6 +107,23 @@
         </nav>
 
     </div>
+    <script>
+        function addToCart(id, name, price) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const existing = cart.find(i => i.id === id);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartBadge();
+            alert(`"${name}" ajouté au panier !`);
+        }
+
+    </script>
 </div>
+
+
 </body>
 </html>
