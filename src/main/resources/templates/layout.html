@@ -20,18 +20,21 @@
         <span class="text-muted small">
             <span th:text="${session.currentUser.username}"></span>
             <span th:if="${session.currentUser.role == 'ADMIN'}"
-                  class="badge bg-danger ms-1">Admin</span>
+                  class="badge bg-primary ms-1">Admin</span>
         </span>
                 <a th:href="@{/orders}"
-                   class="btn btn-outline-dark">Mes commandes</a>
-                <a th:href="@{/logout}" class="btn btn-outline-dark">Déconnexion</a>
+                   class="btn btn-outline-dark">
+                    <i class="bi bi-text-left"></i> Mes commandes</a>
+                <a th:href="@{/logout}" class="btn btn-outline-dark">
+                    <i class="bi bi-door-open"></i> Déconnexion</a>
             </div>
 
             <a th:if="${session.currentUser == null}"
-               class="btn btn-dark" th:href="@{/login}">Connexion</a>
+               class="btn btn-dark" th:href="@{/login}">
+                <i class="bi bi-person-circle"></i> Connexion</a>
 
             <a class="btn btn-dark position-relative" th:href="@{/cart}">
-                <i class="bi bi-cart4"></i> Panier
+                <i class="bi bi-cart2"></i> Panier
                 <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                       id="cartBadge">0</span>
             </a>

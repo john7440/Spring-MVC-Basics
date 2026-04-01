@@ -3,7 +3,7 @@ package com.example;
 import com.example.dao.AppUserRepository;
 import com.example.dao.ArticleRepository;
 import com.example.dao.CategoryRepository;
-import com.example.entities.AppUser;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,6 +24,5 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        //appUserRepository.save(new AppUser("user1", "password123456", "USER"));
     }
 }
