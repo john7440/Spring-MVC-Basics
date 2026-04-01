@@ -1,13 +1,13 @@
 package com.example.web;
 
 import com.example.dao.ArticleRepository;
-import com.example.dao.OrderItemRepository;
 import com.example.dao.OrderRepository;
 import com.example.entities.AppUser;
 import com.example.entities.Article;
 import com.example.entities.Order;
 import com.example.entities.OrderItem;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +22,6 @@ public class OrderController {
 
     @Autowired
     private OrderRepository orderRepository;
-
-    @Autowired
-    private OrderItemRepository orderItemRepository;
 
     @Autowired
     private ArticleRepository articleRepository;
@@ -43,7 +40,7 @@ public class OrderController {
      *         is not logged in
      */
     @PostMapping("/order")
-    public ResponseEntity<?> placeOrder(@RequestBody List<CartItemDTO> items,
+    public ResponseEntity<?> placeOrder(@Valid @RequestBody List<CartItemDTO> items,
                                         HttpSession session) {
         AppUser currentUser = (AppUser) session.getAttribute("currentUser");
         if (currentUser == null) {
