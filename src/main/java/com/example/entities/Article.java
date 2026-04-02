@@ -36,6 +36,9 @@ public class Article implements Serializable {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Column(nullable = false)
+    private boolean deleted = false;
+
     public Article(String brand, String model, String description, double price) {
         this.brand = brand;
         this.model = model;

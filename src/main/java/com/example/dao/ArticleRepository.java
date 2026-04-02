@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArticleRepository extends JpaRepository<Article,Long> {
-    Page<Article> findByModelContains(String model,Pageable pageable);
-    Page<Article> findByCategoryId(Long categoryId, Pageable pageable);
+    Page<Article> findByModelContainsAndDeletedFalse(String model,Pageable pageable);
+    Page<Article> findByCategoryIdAndDeletedFalse(Long categoryId, Pageable pageable);
 }

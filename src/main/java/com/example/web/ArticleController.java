@@ -45,10 +45,10 @@ public class ArticleController {
         Page<Article> articles;
 
         if (categoryId != null) {
-            articles = articleRepository.findByCategoryId(categoryId,PageRequest.of(page,5));
+            articles = articleRepository.findByCategoryIdAndDeletedFalse(categoryId,PageRequest.of(page,5));
             model.addAttribute("currentCategory",categoryId);
         } else {
-            articles = articleRepository.findByModelContains(kw,PageRequest.of(page,5));
+            articles = articleRepository.findByModelContainsAndDeletedFalse(kw,PageRequest.of(page,5));
             model.addAttribute("currentCategory",null);
         }
 
@@ -74,7 +74,10 @@ public class ArticleController {
     @GetMapping("/delete")
     public String delete(Long id, int page,String keyword,HttpSession session) {
         if(SessionUtils.isNotAdmin(session)) return  REDIRECTION;
-        articleRepository.deleteById(id);
+        articleRepository.findById(id).ifPresent(article -> {
+            article.setDeleted(true);
+            articleRepository.save(article);
+        });
         return REDIRECTION;
     }
 
