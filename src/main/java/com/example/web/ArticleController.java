@@ -2,8 +2,8 @@ package com.example.web;
 
 import com.example.dao.ArticleRepository;
 import com.example.dao.CategoryRepository;
-import com.example.entities.AppUser;
 import com.example.entities.Article;
+import com.example.utils.SessionUtils;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +25,8 @@ public class ArticleController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private String REDIRECTION = "redirect:/index";
-    private String CATEGORIES = "listCategories";
-
-    /**
-     * Checks whether the currently authenticated user has the "ADMIN" role
-     *
-     * @param session the current HTTP session
-     * @return true if the session holds a non-null user with role "ADMIN",
-     *         false otherwise
-     */
-    private boolean isAdmin(HttpSession session){
-        AppUser appUser = (AppUser)session.getAttribute("currentUser");
-        return appUser != null && appUser.getRole().equals("ADMIN");
-    }
+    private static final String REDIRECTION = "redirect:/index";
+    private static final String CATEGORIES = "listCategories";
 
     /**
      * Displays the paginated list of articles, with optional keyword search
@@ -85,7 +73,7 @@ public class ArticleController {
      */
     @GetMapping("/delete")
     public String delete(Long id, int page,String keyword,HttpSession session) {
-        if (!isAdmin(session)) return REDIRECTION;
+        if(SessionUtils.isNotAdmin(session)) return  REDIRECTION;
         articleRepository.deleteById(id);
         return REDIRECTION;
     }
@@ -102,7 +90,7 @@ public class ArticleController {
      */
     @GetMapping("/formArticle")
     public String formArticle(Model model, HttpSession session) {
-        if (!isAdmin(session)) return REDIRECTION;
+        if(SessionUtils.isNotAdmin(session)) return  REDIRECTION;
         model.addAttribute("article", new Article());
         model.addAttribute(CATEGORIES, categoryRepository.findAll());
         return "formArticle";
@@ -122,7 +110,7 @@ public class ArticleController {
      */
     @GetMapping("/editArticle")
     public String editArticle(Model model, Long id, HttpSession session) {
-        if (!isAdmin(session)) return REDIRECTION;
+        if(SessionUtils.isNotAdmin(session)) return  REDIRECTION;
         Article article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("Article introuvable"));
         model.addAttribute("article", article);
         model.addAttribute(CATEGORIES, categoryRepository.findAll());
@@ -151,7 +139,7 @@ public class ArticleController {
                        @RequestParam(name = "categoryId", required = false) Long categoryId,
                        @RequestParam(name = "id", required = false) Long id,
                        HttpSession session,Model model) {
-        if (!isAdmin(session)) return REDIRECTION;
+        if(SessionUtils.isNotAdmin(session)) return  REDIRECTION;
         if (bindingResult.hasErrors()) {
             model.addAttribute(CATEGORIES, categoryRepository.findAll());
             return "formArticle";
