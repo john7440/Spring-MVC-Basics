@@ -7,13 +7,15 @@ developed as a Spring Boot / JPA / Thymeleaf training exercise
  
 - [Overview](#overview)
 - [Features](#features)
+- [Architecture](#architecture)
+- [Technologies](#technologies)
 
 ## Overview
  
 SmartZone is a web-based e-commerce platform built with Spring Boot and Thymeleaf.  
 It provides a full article and category management system for administrators,  
-and a shopping experience with a localStorage-based cart and order history for users.
-Authentication is handled via HTTP session with BCrypt password hashing.
+and a shopping experience with a localStorage-based cart and order history for users  
+Note: Authentication is handled via HTTP session with BCrypt password hashing
 
 ## Features
  
@@ -46,3 +48,26 @@ Authentication is handled via HTTP session with BCrypt password hashing.
 - Place an order from the cart (persisted to database)
 - view order history with details
 - Order confirmation page
+
+## Architecture
+ 
+The application follows a **multi-layered MVC architecture**:
+ 
+- **View Layer** (Thymeleaf + Bootstrap 5) - Html templates with layout inheritance
+- **Controller Layer** - Spring MVC `@Controller` and `@RestController`
+- **Repository Layer** - Database access via `JpaRepository`
+- **Entity Layer** - JPA-mapped objects
+- **Security** - Session-based auth + BCrypt via Spring Security
+- **Database** - MariaDB
+ 
+## Technologies
+ 
+- **Language**: Java 17
+- **Framework**: Spring Boot 4.0.5
+- **View**: Thymeleaf + Thymeleaf Layout Dialect
+- **ORM**: Spring Data JPA / Hibernate
+- **Security**: Spring Security (BCrypt, session-based auth)
+- **Database**: MariaDB
+- **Frontend**: Bootstrap 5,bootstrap icons, vanilla JS (localStorage cart)
+- **Build Tool**: Maven
+- **IDE**: IntelliJ IDEA
