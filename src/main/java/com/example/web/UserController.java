@@ -119,4 +119,16 @@ public class UserController {
         return REDIRECTION;
     }
 
+    //----------A SUPPRIMER après usage!!!!!!!!!!!!!!!--------------------
+    //-----Don't forget to delete it after use!!!!!!!!!!!!!!!!----------------------
+    @GetMapping("/createAdmin")
+    public String createAdmin() {
+        AppUser admin = new AppUser();
+        admin.setUsername("admin");
+        admin.setPassword(passwordEncoder.encode("admin123"));
+        admin.setRole("ADMIN");
+        userRepository.save(admin);
+        return "redirect:/login";
+    }
+
 }
