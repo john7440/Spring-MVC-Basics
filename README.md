@@ -11,6 +11,7 @@ developed as a Spring Boot / JPA / Thymeleaf training exercise
 - [Technologies](#technologies)
 - [Installation](#installation)
 - [Database Setup](#database-setup)
+- [Usage](#usage)
 
 ## Overview
  
@@ -103,3 +104,53 @@ spring.jpa.show-sql=false
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
 ```
 **Note**: Update credentials if your MariaDB setup uses a different port, username, or password
+
+### Creating the first Admin account
+ 
+On first run, visit `/createAdmin` to generate the default admin account:
+ 
+| Field    | Value      |
+|----------|------------|
+| Username | `admin`    |
+| Password | `admin123` |
+| Role     | `ADMIN`    |
+ 
+ - **REMOVE** the `/createAdmin` route from `UserController` after first use !
+
+## Usage
+ 
+### Run the application
+ 
+**Option A — IntelliJ IDEA:**
+ 
+Navigate to `src/main/java/com/example/Application.java`  
+Right-click -> `Run 'Application.main()'`
+ 
+**Option B — Maven:**
+```bash
+mvn spring-boot:run
+```
+ 
+Then open your browser at: [http://localhost:8080/index](http://localhost:8080/index)
+ 
+### Navigation
+ 
+| Route                  | Access       | Description                        |
+|------------------------|--------------|------------------------------------|
+| `/index`               | All          | Article list with search & filters |
+| `/formArticle`         | Admin        | Add a new article                  |
+| `/editArticle?id=x`    | Admin        | Edit an existing article           |
+| `/delete?id=x`         | Admin        | Delete an article                  |
+| `/admin/categories`    | Admin        | Manage categories                  |
+| `/cart`                | All          | View shopping cart                 |
+| `/order` (POST)        | User         | Place an order                     |
+| `/orders`              | User         | View order history                 |
+| `/orderConfirmation`   | User         | Order confirmation page            |
+| `/login`               | All          | Login form                         |
+| `/register`            | All          | Registration form                  |
+| `/logout`              | Logged in    | Invalidate session                 |
+
+## License
+ 
+This project is part of a Spring Boot / JPA / Thymeleaf training exercise and is for educational purposes only  
+© 2026 [Jonathan Maier](https://github.com/john7440)
