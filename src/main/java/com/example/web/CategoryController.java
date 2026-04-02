@@ -82,7 +82,4 @@ public class CategoryController {
         categoryRepository.deleteById(id);
         return "redirect:/admin/categories";
     }
-
-    //----------------méthode utilitaire pour vérifier si l'utilisateur actuel est admin----
-
 }
