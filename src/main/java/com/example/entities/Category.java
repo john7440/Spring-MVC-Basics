@@ -8,7 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,8 +24,8 @@ public class Category implements Serializable {
     @Size(min = 1, max = 50)
     private String name;
 
-    @OneToMany
-    private Collection<Article> articles;
+    @OneToMany(mappedBy = "category")
+    private List<Article> articles = new ArrayList<>();
 
     public Category(String name) {
         this.name = name;

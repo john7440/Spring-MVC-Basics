@@ -1,5 +1,6 @@
 package com.example.web;
 
+import com.example.dao.ArticleRepository;
 import com.example.dao.CategoryRepository;
 import com.example.entities.Category;
 import com.example.utils.SessionUtils;
@@ -16,6 +17,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     private static final String REDIRECTION = "redirect:/index";
 
@@ -79,6 +83,14 @@ public class CategoryController {
     @GetMapping("/admin/deleteCategory")
     public String deleteCategory(@RequestParam Long id, HttpSession session){
         if(SessionUtils.isNotAdmin(session)) return  REDIRECTION;
+
+        categoryRepository.findById(id).ifPresent(category -> {
+            category.getArticles().forEach(article -> {
+                article.setCategory(null);
+                articleRepository.save(article);
+            });
+            categoryRepository.delete(category);
+        });
         categoryRepository.deleteById(id);
         return "redirect:/admin/categories";
     }
