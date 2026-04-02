@@ -1,4 +1,4 @@
-# SmartZone
+# Shop-MVC-Basics
  
 A Spring Boot MVC web application for managing an e-commerce shop (articles, categories, orders and users),  
 developed as a Spring Boot / JPA / Thymeleaf training exercise
@@ -12,6 +12,7 @@ developed as a Spring Boot / JPA / Thymeleaf training exercise
 - [Installation](#installation)
 - [Database Setup](#database-setup)
 - [Usage](#usage)
+- [Project Structure](#project-structure)
 
 ## Overview
  
@@ -149,6 +150,55 @@ Then open your browser at: [http://localhost:8080/index](http://localhost:8080/i
 | `/login`               | All          | Login form                         |
 | `/register`            | All          | Registration form                  |
 | `/logout`              | Logged in    | Invalidate session                 |
+
+## Project Structure
+ 
+```text
+Shop-Spring-MVC/
+├── src/
+│   └── main/
+│       ├── java/com/example/
+│       │   ├── Application.java                  # Entry point
+│       │   ├── config/
+│       │   │   └── SecurityConfig.java           # BCrypt + Security filter chain
+│       │   ├── dao/
+│       │   │   ├── ArticleRepository.java
+│       │   │   ├── CategoryRepository.java
+│       │   │   ├── AppUserRepository.java
+│       │   │   ├── OrderRepository.java
+│       │   │   └── OrderItemRepository.java
+│       │   ├── entities/
+│       │   │   ├── Article.java
+│       │   │   ├── Category.java
+│       │   │   ├── AppUser.java
+│       │   │   ├── Order.java
+│       │   │   └── OrderItem.java
+│       │   ├── utils/
+│       │   │   └── SessionUtils.java             
+│       │   └── web/
+│       │       ├── ArticleController.java        # Article CRUD
+│       │       ├── CategoryController.java       # Category CRUD (admin)
+│       │       ├── UserController.java           # login, register, logout
+│       │       ├── UserOrderController.java      # Order history + confirmation
+│       │       └── OrderController.java          # rest - place order
+│       └── resources/
+│           ├── templates/
+│           │   ├── layout.html                   # base layout (navbar + footer)
+│           │   ├── articles.html                 # Article list
+│           │   ├── formArticle.html              # Add / edit article
+│           │   ├── categories.html               # Category management
+│           │   ├── cart.html                     # Shopping cart (localStorage)
+│           │   ├── orders.html                   # Order history
+│           │   ├── orderConfirmation.html        # Order confirmation
+│           │   ├── login.html                    # Login form
+│           │   └── register.html                 # Registration form
+│           ├── static/
+│           │   └── css/
+│           │       └── bootstrap.min.css
+│           └── application.properties
+├── pom.xml
+└── README.md
+```
 
 ## License
  
